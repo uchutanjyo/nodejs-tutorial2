@@ -1,5 +1,6 @@
 const { redirect } = require('express/lib/response');
 const Product = require('../models/product');
+const Cart = require('../models/cart')
 // imports Product class , saves as varaible Product
 
 exports.getProducts = (req, res, next) => {
@@ -17,7 +18,6 @@ exports.getProducts = (req, res, next) => {
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
 Product.findById(prodId, product => {
-  console.log(product[0].title)
   res.render('shop/product-detail', {
       prod: product[0],
       pageTitle: 'Product Details',
@@ -50,13 +50,14 @@ exports.getCart = (req, res, next) => {
 // renders 'cart' page /defines pageTitle
 
 exports.postCart = (req,res,next) => {
+    console.log('ohokay')
+
   const prodId = req.body.productId;
+  console.log(prodId);
+Product.findById(prodId, (product) => {
+Cart.addProduct(prodId, product.price)
+})
   console.log(prodId)
-  // const title = req.body.title;
-  // const imageUrl = req.body.imageUrl;
-  // const price = req.body.price;
-  // const description = req.body.description;
-  // const product = new Product(title, imageUrl, description, price);
   res.redirect('/cart');
 };
 

@@ -24,7 +24,8 @@ const getProductsFromFile = cb => {
 };
 
 module.exports = class Product {
-  constructor(title, imageUrl, description, price) {
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id; 
     this.title = title;
     this.imageUrl = imageUrl;
     this.description = description;
@@ -32,10 +33,23 @@ module.exports = class Product {
   }
 // creates Product class - blueprint with the above properties
   save() {
-    this.id = Math.random().toString();
-    // when a new Product is created, a .id property is added  ( a random #)
+  
+
     getProductsFromFile(products => {
-      // gPFF function called with a callback function which takes products as a parameter
+            // gPFF function called with a callback function which takes products as a parameter
+        if (this.id) {
+       const existingProductIndex = products.findIndex(product =>  product.id === this.id)
+       const existingProduct = products[existingProductIndex]
+       const updatedProduct = this
+       
+          existingProduct = updatedProduct
+            console.log(products)
+            fs.writeFile(JSON.stringify(products), err => {
+              console.log(err)
+            })
+    }
+        this.id = Math.random().toString();
+    // when a new Product is created, a .id property is added  ( a random #)
       console.log(products)
       // products is the parsed js array (from data.js)
       products.push(this);

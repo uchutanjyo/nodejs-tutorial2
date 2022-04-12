@@ -7,7 +7,7 @@ const adminController = require('../controllers/admin');
 const router = express.Router();
 
 // /admin/add-product => GET
-router.get('/add-product', adminController.getAddProduct);
+router.get('/edit-product', adminController.getAddProduct);
 // actually routes controller function (getAddProduct from adminController (controllsres page)) to the add-product view.
 
 
@@ -20,5 +20,7 @@ router.get('/products', adminController.getProducts);
 router.post('/add-product', adminController.postAddProduct);
 // routes controller function (POST request for adding product to list) to add=product views page
 
+router.get('/edit-product/:productId', adminController.getEditProduct)
 
+router.get('edit-product')
 module.exports = router;

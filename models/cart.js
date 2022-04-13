@@ -8,7 +8,6 @@ const p = path.join(
 );
 
 module.exports = class Cart {
-
 static addProduct(id, productPrice) {
     // fetch the previos cart
 fs.readFile(p, (err, fileContent) => {
@@ -50,5 +49,30 @@ fs.readFile(p, (err, fileContent) => {
 
 })
 
+
 }
+
+static deleteCartItem(id, productPrice) {
+    fs.readFile(p, (err, fileContent) => {
+        let cart = {products : [], totalPrice: 0}
+// cart defined as variable with empty array property and totalPrice property
+    if(!err) {
+        cart = JSON.parse(fileContent);
+    }
+    console.log(cart.products, 'CP')
+    const productIndex = cart.products.findIndex(product =>  product.id === id)
+     const itemToDelete = cart.products[productIndex]; 
+
+     cart.totalPrice = cart.qty * productPrice
+
+  cart.products.splice(itemToDelete, 1)
+  //  console.log(updatedProducts, 'up')
+            fs.writeFile(p, JSON.stringify(cart.products), err => {
+              console.log(err)
+            })
+       
+
+    })
+}
+
 }

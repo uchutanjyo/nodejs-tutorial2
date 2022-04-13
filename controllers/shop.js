@@ -63,6 +63,8 @@ Cart.addProduct(prodId, product[0].price)
 };
 
 
+
+
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {
     path: '/orders',
@@ -78,3 +80,4 @@ exports.getCheckout = (req, res, next) => {
   });
 };
 // same as last 2
+

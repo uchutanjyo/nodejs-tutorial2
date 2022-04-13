@@ -15,12 +15,18 @@ router.get('/edit-product', adminController.getAddProduct);
 router.get('/products', adminController.getProducts);
 // does same thing for getproducts page
 
-
 // /admin/add-product => POST
 router.post('/add-product', adminController.postAddProduct);
 // routes controller function (POST request for adding product to list) to add=product views page
 
 router.get('/edit-product/:productId', adminController.getEditProduct)
 
-router.get('edit-product')
+router.post('/edit-product', adminController.postEditProduct)
+
+router.post('/delete-cart', adminController.postDeleteCartItem)
+
+
+router.post('/delete-product', adminController.postDeleteProduct)
+
+
 module.exports = router;

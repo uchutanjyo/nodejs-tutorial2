@@ -29,7 +29,10 @@
                                 <div class="card__actions">
                                     <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn">Edit</a>
                                     <form action="/admin/delete-product" method="POST">
-                                        <button class="btn" type="submit">Delete</button>
+                                        <input type="hidden" value="<%= product.id %>" name="productId">
+                                        <%= console.log(product.id, 'PRODID') %>
+                                        <!--hidden input which contains product.id -->
+                                        <button class="btn" type="submit">Delete</button> 
                                     </form>
 
                                 </div>

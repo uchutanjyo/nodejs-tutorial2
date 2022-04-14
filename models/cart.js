@@ -1,26 +1,31 @@
 const fs = require('fs');
 const path = require('path');
 
+
 const p = path.join(
   path.dirname(process.mainModule.filename),
   'data',
   'cart.json'
 );
 
+
+
 module.exports = class Cart {
 static addProduct(id, productPrice) {
     // fetch the previos cart
+            console.log( id, 'up')
+
 fs.readFile(p, (err, fileContent) => {
 //   p is the path set above. err, fileContent are arguments in the callback -- fileContent is the unparsed JSON data found under the specified path
     let cart = {products : [], totalPrice: 0}
 // cart defined as variable with empty array property and totalPrice property
     if(!err) {
         cart = JSON.parse(fileContent);
-    
                   // if no error, cart becomes parsed JSON
     }
     // analyze cart   - check for already-existing products
- 
+                console.log( cart, 'cart')
+
     const existingProductIndex = cart.products.findIndex(product =>  product.id === id)
 //   defines variable which contains the index of the product found in the products array in the shopping cart which has the same id as the current product being added to the cart (if it exists)
      const existingProduct = cart.products[existingProductIndex]; 
@@ -55,24 +60,38 @@ fs.readFile(p, (err, fileContent) => {
 static deleteCartItem(id, productPrice) {
     fs.readFile(p, (err, fileContent) => {
         let cart = {products : [], totalPrice: 0}
+                cart = JSON.parse(fileContent);
+
 // cart defined as variable with empty array property and totalPrice property
-    if(!err) {
-        cart = JSON.parse(fileContent);
-    }
-    console.log(cart.products, 'CP')
-    const productIndex = cart.products.findIndex(product =>  product.id === id)
-     const itemToDelete = cart.products[productIndex]; 
-
-     cart.totalPrice = cart.qty * productPrice
-
-  cart.products.splice(itemToDelete, 1)
+ 
+        const updatedCart = cart
+        console.log(updatedCart, 'UC')
+    const product= updatedCart.products.find(product =>  product.id === id)
+    updatedCart.products = (updatedCart.products.filter(product => product.id !== id))
+     updatedCart.totalPrice = product.qty * productPrice
+    
   //  console.log(updatedProducts, 'up')
-            fs.writeFile(p, JSON.stringify(cart.products), err => {
+            fs.writeFile(p, JSON.stringify(), err => {
               console.log(err)
             })
-       
-
+      
     })
 }
+
+static fetchCart(cb) {
+  fs.readFile(p, (err, fileContent) => {
+    // p = the path to be read, (err, fileContent) = arguments in callback function - error, and data to be read
+    if (err) {
+      cb(null);
+      // if error, return empty array
+    } else {
+        
+      cb(JSON.parse(fileContent));
+      
+      // if no error, parse JSON file (data.js) -it becomes a javascript array - and use it as argument in callback func (below)
+    }
+  });
+  // this function basically reads the JSON data (products existing already) and parses it
+};
 
 }

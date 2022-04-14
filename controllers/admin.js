@@ -74,15 +74,6 @@ Product.delete(prodId)
    res.redirect('/admin/products');
 }
 
-exports.postDeleteCartItem = (req, res, next) => {
-    const prodId = req.body.productId;
-  Product.findById(prodId, (product) => {
-Cart.deleteCartItem(prodId, product.price)
-  })
-     res.redirect('/');
-
-}
-
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll(products => {

@@ -18,12 +18,7 @@
                         <div class="card__actions">
                          <%- include('../includes/add-to-cart.ejs') %>
                         </div>
-                        <form action="/admin/delete-cart" method="POST">
-                                        <input type="hidden" value="<%= prod.id %>" name="productId">
-                                      
-                                        <!--hidden input which contains product.id -->
-                                        <button class="btn" type="submit">Delete</button> 
-                                    </form>
+                 
                     </article>
         </main>
         <%- include('../includes/end.ejs') %>

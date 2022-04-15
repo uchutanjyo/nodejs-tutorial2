@@ -36,27 +36,26 @@ fs.readFile(p, (err, fileContent) => {
         updatedProduct.qty = updatedProduct.qty + 1;
         cart.products = [...cart.products];
         cart.products[existingProductIndex] = updatedProduct
+           
     // if the product being added to the cart is already there, the variable updatedProduct first takes all the properties of that existing product (spread operator)
     // the qty property has 1 added to it
     // the cart variable's products array is re-updated with all of the pre-existing cart products. then, the product which is being updated's index is targeted and replaced with the updatedProduct
     }
     else { 
         updatedProduct = {id: id, qty: 1}
+         console.log(updatedProduct, 'uP')
             cart.products.push(updatedProduct)
             // if there is no existing product in the cart for the item about to be added, updatedProduct simply becomes a brand new object w/ a quantity of 1,  and this new product is pushed to the products array
     }
-
+    
     cart.totalPrice = cart.totalPrice + +productPrice
+    console.log(cart.totalPrice)
     fs.writeFile(p, JSON.stringify(cart), err => {
         console.log(err)
         // the cart's totalPrice property is then updated to include the new additions. the JSON file is then overwritten with the updated info.
     })
-
 })
-
-
 }
-
 static deleteCartItem(id, productPrice) {
     fs.readFile(p, (err, fileContent) => {
         let cart = {products : [], totalPrice: 0}
@@ -65,16 +64,18 @@ static deleteCartItem(id, productPrice) {
 // cart defined as variable with empty array property and totalPrice property
  
         const updatedCart = cart
-        console.log(updatedCart, 'UC')
+                      console.log(updatedCart, 'UC')
+
     const product= updatedCart.products.find(product =>  product.id === id)
     updatedCart.products = (updatedCart.products.filter(product => product.id !== id))
-     updatedCart.totalPrice = product.qty * productPrice
     
-  //  console.log(updatedProducts, 'up')
-            fs.writeFile(p, JSON.stringify(), err => {
+     updatedCart.totalPrice = updatedCart.totalPrice -
+     product.qty * productPrice
+                            console.log(updatedCart, 'UC2')
+
+            fs.writeFile(p, JSON.stringify(updatedCart), err => {
               console.log(err)
             })
-      
     })
 }
 

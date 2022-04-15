@@ -70,6 +70,7 @@ const prodId = req.body.productId;
 console.log(req.body.productId, 'prodid')
  Product.findById(prodId, product => {
 Product.delete(prodId)
+
  })
    res.redirect('/admin/products');
 }

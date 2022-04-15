@@ -2,7 +2,7 @@
     </head>
 <main>
     <h1>Cart</h1>
-                                            <% console.log(products) %>
+                                        
 
          <% if (products.length > 0) { %>
                     <div class="grid">
@@ -23,6 +23,9 @@
                                     <p class="product__description">
                                         <%= product.productData.description %>
                                     </p>
+                                    <p class="product__description">
+                                      Quantity:  <%= product.qty %>
+                                    </p>
                                     
                                 </div>
 
@@ -30,18 +33,19 @@
 
                                 <div class="card__actions">
                                     <a href="/admin/edit-product/<%= product.productData.id %>?edit=true" class="btn">Edit</a>
-                                    <form action="/admin/delete-product" method="POST">
+                                    <form action="/delete-cart/" method="POST">
                                         <input type="hidden" value="<%= product.productData.id %>" name="productId">                                   
                                         <button class="btn" type="submit">Delete from cart</button> 
                                     </form>
 
                                 </div>
                             </article>
+                                 <%  } %>
+                                 <p class="product__description">
+                                      Total price:  <%= totalPrice %>
+                                    </p>
+                               <% } %>
 
-
-                           
-
-                                 <%  } } %>
 </main>
        
     <body>

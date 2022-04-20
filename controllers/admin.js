@@ -20,10 +20,17 @@ exports.postAddProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Product(null, title, imageUrl, description, price);
-  product.save();
+  const product = new Product(null, title, price, imageUrl, description);
+  Product.create({
+    title: title,
+    price: price,
+    imageUrl: imageUrl,
+    description: description
+  }).then(result => {
+    console.log('resim');
+   res.redirect('/admin/products');
+  }).catch(err => console.log(err))
   // creates new product out of entered info on add product page - id is set to null here as it does not have one yet - it will be generated
-  res.redirect('/');
 };
 
 exports.getEditProduct = (req, res, next) => {
@@ -35,20 +42,19 @@ exports.getEditProduct = (req, res, next) => {
   }
   const prodId = req.params.productId;
 //  sets prodId as variable representing the productId value from hidden input on view (product.id). this will be the id of the product we are currently editing.
-  Product.findById(prodId, product => {
-  res.render('admin/edit-product', {
+  Product.findByPk(prodId).then(product => {
+res.render('admin/edit-product', {
     // renders edit-product page 
     pageTitle: 'Edit Product',
     path: '/admin/edit-product',
     // path is edit, rather than add product. this means getEditProduct will execute rather than getAddProduct
     editing: editMode,
     // editing will be set to true when editing an item as the query will be set
-    product: product[0]
+    product: product
     // the product property is set to the 1st (and only) array item returned by findById (the id of the product we want to edit)
-  });
   })
-
-};
+  }).catch(err => console.log(err)
+  )};
 
 exports.postEditProduct = (req, res, next) => {
 const prodId = req.body.productId;
@@ -58,31 +64,40 @@ const updatedPrice = req.body.price;
 const updatedimageUrl = req.body.imageUrl;
 const updatedDescription = req.body.description;
 // the updated properties which have been entered into the text inputs
-const updatedProduct = new Product(prodId, updatedTitle, updatedimageUrl, updatedDescription, updatedPrice)
-// new Product created iwth the existing id and the updated properties
-updatedProduct.save();
+Product.findByPk(prodId).then(product => {
+product.title = updatedTitle;
+product.price = updatedPrice;
+product.description = updatedDescription;
+product.imageUrl = updatedimageUrl;
+return product.save()
+}
+).then(result => {
+  res.redirect('/admin/products')
+  console.log(result)})
+.catch(err => {console.log(err)})
 // save method called on updated product; old product with same index in products array overwritten
-res.redirect('/admin/products')
 }
 
 exports.postDeleteProduct = (req, res, next) => {
 const prodId = req.body.productId;
-console.log(req.body.productId, 'prodid')
- Product.findById(prodId, product => {
-Product.delete(prodId)
-
- })
+ Product.findByPk(prodId)
+ .then(product=> {
+return product.destroy(prodId)
+.then(result => {
+  console.log('destroyed');
    res.redirect('/admin/products');
+ })})
+.catch(err => console.log(err))
+
 }
 
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('admin/products', {
+  Product.findAll().then(products => {
+     res.render('admin/products', {
       prods: products,
       pageTitle: 'Admin Products',
       path: '/admin/products'
-      // displays all products on admin-products page
-    });
-  });
+  })}
+  ).catch(err => console.log(err))
 };

@@ -7,7 +7,6 @@
    <%- include('../includes/navigation.ejs') %>
 
     <main>
-        <% console.log(editing, 'isit') %>
 <form action="/admin/<%  if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
     <!-- changes action of form depending on whether editing is true -->
     <div class="form-control">

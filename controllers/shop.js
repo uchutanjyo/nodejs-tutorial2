@@ -4,41 +4,41 @@ const Cart = require('../models/cart')
 // imports Product class , saves as varaible Product
 
 exports.getProducts = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/product-list', {
+  Product.findAll().then(products => {
+     res.render('shop/product-list', {
       prods: products,
-      pageTitle: 'All Products',
+      pageTitle: 'Products',
       path: '/products'
-    });
-  });
+  })}
+  ).catch(err => console.log(err))
 };
+
 // defines variables for product-list page.
 // in fetchAll callback, products is the stringified JSON data fetched in the getProductsFromFile method. it becomes the property 'prods' on the locals object here.
 
 exports.getProduct = (req, res, next) => {
   const prodId = req.params.productId;
-Product.findById(prodId, product => {
-  console.log(product[0])
-  res.render('shop/product-detail', {
-
-      prod: product[0],
-      pageTitle: 'Product Details',
+Product.findByPk(prodId)
+.then(product => {
+res.render('shop/product-detail', {
+      prod: product,
+      pageTitle: product.title,
            path: '/products'
-    });
-})
+    })
+}).catch(err => console.log(err))
 };
 // defines variable pointing to id product id route to be used ___
 // productId is accessible because it is the name used after the colon in routes - the name with which you can extract the data on the req.params object
 
 
 exports.getIndex = (req, res, next) => {
-  Product.fetchAll(products => {
-    res.render('shop/index', {
+  Product.findAll().then(products => {
+       res.render('shop/index', {
       prods: products,
       pageTitle: 'Shop',
       path: '/'
-    });
-  });
+  })}
+  ).catch(err => console.log(err))
 };
 
 // does the same thing as  the top function -- except for the index page (also displays all products)

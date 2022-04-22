@@ -21,11 +21,11 @@ exports.postAddProduct = (req, res, next) => {
   const price = req.body.price;
   const description = req.body.description;
   const product = new Product(null, title, price, imageUrl, description);
-  Product.create({
+  req.user.createProduct({
     title: title,
     price: price,
     imageUrl: imageUrl,
-    description: description
+    description: description,
   }).then(result => {
     console.log('resim');
    res.redirect('/admin/products');
@@ -42,7 +42,10 @@ exports.getEditProduct = (req, res, next) => {
   }
   const prodId = req.params.productId;
 //  sets prodId as variable representing the productId value from hidden input on view (product.id). this will be the id of the product we are currently editing.
-  Product.findByPk(prodId).then(product => {
+ req.user.getProducts({where: {id: prodId}})
+ .then(products => {
+   const product = products[0]
+// Product.findByPk(prodId).then(product => {
 res.render('admin/edit-product', {
     // renders edit-product page 
     pageTitle: 'Edit Product',
@@ -93,11 +96,14 @@ return product.destroy(prodId)
 
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll().then(products => {
-     res.render('admin/products', {
-      prods: products,
-      pageTitle: 'Admin Products',
-      path: '/admin/products'
-  })}
-  ).catch(err => console.log(err))
+  req.user
+    .getProducts()
+    .then(products => {
+      res.render('admin/products', {
+        prods: products,
+        pageTitle: 'Admin Products',
+        path: '/admin/products'
+      });
+    })
+    .catch(err => console.log(err));
 };

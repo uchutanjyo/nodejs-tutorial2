@@ -1,5 +1,7 @@
 <%- include('../includes/head.ejs') %>
     </head>
+            <%- include('../includes/navigation.ejs') %>
+
 <main>
     <h1>Cart</h1>
                                         
@@ -10,21 +12,21 @@
                             <article class="card product-item">
                                 <header class="card__header">
                                     <h1 class="product__title">
-                                        <%= product.productData.title %>
+                                        <%= product.title %>
                                     </h1>
                                 </header>
                                 <div class="card__image">
-                                    <img src="<%= product.productData.imageUrl %>" alt="<%= product.productData.title %>">
+                                   
                                 </div>
                                 <div class="card__content">
                                     <h2 class="product__price">$
-                                        <%= product.productData.price %>
+                                        <%= product.price %>
                                     </h2>
                                     <p class="product__description">
-                                        <%= product.productData.description %>
+                                        <%= product.description %>
                                     </p>
                                     <p class="product__description">
-                                      Quantity:  <%= product.qty %>
+                                      Quantity:  <%= product.cartItem.quantity %>
                                     </p>
                                     
                                 </div>
@@ -32,22 +34,24 @@
                            
 
                                 <div class="card__actions">
-                                    <a href="/admin/edit-product/<%= product.productData.id %>?edit=true" class="btn">Edit</a>
+                                    <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn">Edit</a>
                                     <form action="/delete-cart/" method="POST">
-                                        <input type="hidden" value="<%= product.productData.id %>" name="productId">                                   
+                                        <input type="hidden" value="<%= product.id %>" name="productId">                                   
                                         <button class="btn" type="submit">Delete from cart</button> 
                                     </form>
 
                                 </div>
                             </article>
+                           
                                  <%  } %>
                                  <p class="product__description">
                                       Total price:  <%= totalPrice %>
                                     </p>
                                <% } %>
-
+       <form action="/create-order" method="POST">
+                                <button class="btn" type="submit">Order Now</button>
+                            </form>
 </main>
-       
+ 
     <body>
-        <%- include('../includes/navigation.ejs') %>
         <%- include('../includes/end.ejs') %>
